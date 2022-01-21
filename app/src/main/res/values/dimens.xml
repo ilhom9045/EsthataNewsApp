@@ -1,0 +1,5 @@
+<resources>
+    <dimen name="bottom_sheet_dialogTopTextSize">16dp</dimen>
+    <dimen name="new_item_title_textSize">16sp</dimen>
+    <dimen name="new_item_desc_textSize">14sp</dimen>
+</resources>
