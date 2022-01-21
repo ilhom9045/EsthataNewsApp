@@ -19,11 +19,11 @@ class ApiKeyInterceptor(context: Context) : BaseInterceptor(context) {
                     return response
                 }
                 else -> {
-                    throw Exception("Response is`t available ${response.code} ${response.body}")
+                    throw Exception()
                 }
             }
         } else {
-            throw Exception("Response is`t available ${response.code} ${response.body}")
+            throw Exception()
         }
     }
 }

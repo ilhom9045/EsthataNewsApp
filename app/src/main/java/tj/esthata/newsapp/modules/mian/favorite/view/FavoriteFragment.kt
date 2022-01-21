@@ -12,6 +12,7 @@ import tj.esthata.newsapp.modules.mian.home.ui.adapter.NewsRecyclerViewAdapter
 import tj.esthata.newsapp.modules.mian.ui.callback.OnToolbarChangeListener
 import tj.esthata.newsapp.modules.mian.ui.model.NewResponseModelArticles
 import tj.esthata.newsapp.modules.mian.ui.vm.MainViewModel
+import tj.esthata.newsapp.others.d
 
 class FavoriteFragment : BaseFragmentWithSharedViewModel<MainViewModel>(
     MainViewModel::class,
@@ -93,6 +94,7 @@ class FavoriteFragment : BaseFragmentWithSharedViewModel<MainViewModel>(
     }
 
     override fun onSearch(q: String?) {
+        d("onSearch Favorite", q.toString())
         if (!q.isNullOrEmpty()) {
             viewmodel.searchByFavorite(q)
         } else {

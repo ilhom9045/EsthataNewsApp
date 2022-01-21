@@ -5,7 +5,12 @@ import android.text.InputType
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.widget.SearchView
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import tj.esthata.newsapp.R
 import tj.esthata.newsapp.core.activity.BaseActivityWithViewModel
 import tj.esthata.newsapp.core.fragment.BaseFragment
@@ -16,6 +21,7 @@ import tj.esthata.newsapp.modules.mian.settings.view.SettingsFragment
 import tj.esthata.newsapp.modules.mian.ui.callback.OnToolbarChangeListener
 import tj.esthata.newsapp.modules.mian.ui.model.BottomNavigationFragmentModel
 import tj.esthata.newsapp.modules.mian.ui.vm.MainViewModel
+import tj.esthata.newsapp.others.Configs
 import tj.esthata.newsapp.others.d
 
 class MainActivity :
@@ -24,6 +30,7 @@ class MainActivity :
 
     private lateinit var bottomNavigation: BottomNavigationView
     private var searchView: SearchView? = null
+    private var latestText: String? = null
 
     companion object {
         private var checkedMenu = 0
@@ -38,7 +45,7 @@ class MainActivity :
         init()
         listener()
         viewmodel()
-     }
+    }
 
     private fun init() {
         bottomNavigation = findViewById(R.id.nav_view)
@@ -52,26 +59,25 @@ class MainActivity :
             when (it.itemId) {
                 R.id.navigation_home -> {
                     checkedMenu = 0
-                    transaction(bottomNavigationItemList[checkedMenu].fragment)
+                    transaction(HomeFragment.newInstance(this))
                     return@setOnItemSelectedListener true
                 }
 
                 R.id.navigation_history -> {
                     checkedMenu = 1
-                    transaction(bottomNavigationItemList[checkedMenu].fragment)
+                    transaction(HistoryFragment.newInstance(this))
                     return@setOnItemSelectedListener true
                 }
 
                 R.id.navigation_favorite -> {
                     checkedMenu = 2
-                    transaction(bottomNavigationItemList[checkedMenu].fragment)
+                    transaction(FavoriteFragment.newInstance(this))
                     return@setOnItemSelectedListener true
                 }
 
-
                 R.id.navigation_settings -> {
                     checkedMenu = 3
-                    transaction(bottomNavigationItemList[checkedMenu].fragment)
+                    transaction(SettingsFragment.newInstance(this))
                     return@setOnItemSelectedListener true
                 }
             }
@@ -98,25 +104,21 @@ class MainActivity :
         if (bottomNavigationItemList.isNullOrEmpty()) {
             bottomNavigationItemList.add(
                 BottomNavigationFragmentModel(
-                    0,
                     HomeFragment.newInstance(this)
                 )
             )
             bottomNavigationItemList.add(
                 BottomNavigationFragmentModel(
-                    1,
                     HistoryFragment.newInstance(this)
                 )
             )
             bottomNavigationItemList.add(
                 BottomNavigationFragmentModel(
-                    2,
                     FavoriteFragment.newInstance(this)
                 )
             )
             bottomNavigationItemList.add(
                 BottomNavigationFragmentModel(
-                    3,
                     SettingsFragment.newInstance(this)
                 )
             )
@@ -134,7 +136,7 @@ class MainActivity :
     private fun transaction(fragment: BaseFragment) {
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.main_container, fragment)
+            .replace(R.id.main_container, fragment, this::class.java.simpleName)
             .commit()
     }
 
@@ -155,15 +157,13 @@ class MainActivity :
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {
-        return false
+        (supportFragmentManager.findFragmentByTag(this::class.java.simpleName) as BaseFragment).onSearch(
+            query
+        )
+        return true
     }
 
     override fun onQueryTextChange(newText: String?): Boolean {
-        newText?.let {
-            d("newText", it)
-            d("fragment", bottomNavigationItemList[checkedMenu].fragment::class.java.simpleName)
-            bottomNavigationItemList[checkedMenu].fragment.onSearch(newText)
-        }
-        return true
+        return false
     }
 }

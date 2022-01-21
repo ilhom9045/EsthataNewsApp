@@ -16,7 +16,9 @@
         android:usesCleartextTraffic="true"
         android:theme="@style/Theme.EsthataNewsApp.NoActionBar"
         tools:targetApi="m">
+
         <activity
+            android:screenOrientation="portrait"
             android:name=".modules.mian.ui.view.MainActivity"
             android:exported="true">
             <intent-filter>

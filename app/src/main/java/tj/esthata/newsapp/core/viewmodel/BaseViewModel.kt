@@ -27,7 +27,7 @@ import java.net.SocketTimeoutException
 abstract class BaseViewModel : ViewModel(), KoinComponent {
     private val mutex = Mutex()
     protected val network: NetworkRepositry by inject()
-    protected val sqlRepository:SqlRepository by inject()
+    protected val sqlRepository: SqlRepository by inject()
 
     private val _responseErrorHandler = MutableLiveData<ErrorEvent>()
     val responseErrorHandler: LiveData<ErrorEvent> = _responseErrorHandler
@@ -54,7 +54,6 @@ abstract class BaseViewModel : ViewModel(), KoinComponent {
         }
         requestStack.add(model)
         try {
-
             request.invoke().enqueue(object : Callback<T> {
                 override fun onResponse(call: Call<T>, response: Response<T>) {
                     if (response.isSuccessful) {
@@ -77,12 +76,12 @@ abstract class BaseViewModel : ViewModel(), KoinComponent {
     }
 
     protected fun <T> synsRequest(
-        request: suspend () -> Call<T>,
-        liveData: MutableLiveData<Event<T>>
+        liveData: MutableLiveData<Event<T>>,
+        request: suspend () -> Call<T>
     ) {
         liveData.value = Event.loading()
         val model = ContinueRequestModel {
-            synsRequest(request, liveData)
+            synsRequest(liveData, request)
         }
         requestStack.add(model)
         viewModelScope.launch(Dispatchers.IO) {
@@ -128,7 +127,7 @@ abstract class BaseViewModel : ViewModel(), KoinComponent {
                     )
             }
 
-            is SocketException ->{
+            is SocketException -> {
                 _responseErrorHandler.value =
                     ErrorEvent(
                         ErrorStatus.InternetConnectionException,
@@ -142,9 +141,9 @@ abstract class BaseViewModel : ViewModel(), KoinComponent {
             }
 
             else -> {
-                _responseErrorHandler.value =
+                _responseErrorHandler.postValue(
                     ErrorEvent(ErrorStatus.ErrorException, e.message)
-
+                )
             }
         }
     }

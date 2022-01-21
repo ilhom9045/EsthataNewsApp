@@ -4,13 +4,12 @@ import android.os.Bundle
 import android.view.View
 import android.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
-import org.koin.androidx.viewmodel.ext.android.sharedStateViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import tj.esthata.newsapp.R
-import tj.esthata.newsapp.core.fragment.BaseFragmentWithViewModel
+import tj.esthata.newsapp.core.fragment.BaseFragmentWithSharedViewModel
 import tj.esthata.newsapp.modules.mian.home.newsdetails.view.NewsDetailsFragment
 import tj.esthata.newsapp.modules.mian.home.ui.adapter.CustomLinearLayoutManager
 import tj.esthata.newsapp.modules.mian.home.ui.adapter.NewsRecyclerViewAdapter
-import tj.esthata.newsapp.modules.mian.home.ui.vm.ViewPagerFragmentsViewModel
 import tj.esthata.newsapp.modules.mian.ui.callback.OnToolbarChangeListener
 import tj.esthata.newsapp.modules.mian.ui.model.NewResponseModelArticles
 import tj.esthata.newsapp.modules.mian.ui.model.NewResponseModelArticlesSource
@@ -19,16 +18,16 @@ import tj.esthata.newsapp.others.ApiConfig
 import tj.esthata.newsapp.others.showToast
 import tj.esthata.newsapp.repository.networkrepository.event.Status
 
-class ViewPagerFragment : BaseFragmentWithViewModel<ViewPagerFragmentsViewModel>(
-    ViewPagerFragmentsViewModel::class,
+class ViewPagerFragment : BaseFragmentWithSharedViewModel<MainViewModel>(
+    MainViewModel::class,
     R.layout.viewpager_fragment
 ) {
-
-    private val mainViewmodel: MainViewModel by sharedStateViewModel()
+    private val mainViewmodel by viewModel<MainViewModel>()
     private lateinit var recyclerView: RecyclerView
     private lateinit var newsRecyclerViewAdapter: NewsRecyclerViewAdapter
     private var category: String? = null
     private var onToolbarChangeListener: OnToolbarChangeListener? = null
+    private var key: String? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -39,13 +38,35 @@ class ViewPagerFragment : BaseFragmentWithViewModel<ViewPagerFragmentsViewModel>
 
     override fun onSearch(q: String?) {
         if (!q.isNullOrEmpty()) {
-            viewmodel.searchByTitle(q)
+            key?.let { viewmodel.searchByTitle(q, it) }
         } else {
             viewmodel()
         }
     }
 
     private fun viewmodel() {
+        viewmodel.newsLivedataMap[key]?.observe(viewLifecycleOwner, {
+            when (it.status) {
+                Status.LOADING -> {
+                    loading.showLoading()
+                    newsRecyclerViewAdapter.removeAllItems()
+                }
+                Status.ERROR -> {
+                    loading.hideLoading()
+                }
+                Status.SUCCESS -> {
+                    loading.hideLoading()
+                    it.data?.let { response ->
+                        if (response.status == ApiConfig.statusOK) {
+                            newsRecyclerViewAdapter.setItems(response.articles)
+                        } else {
+                            response.message?.let { it1 -> requireContext().showToast(it1) }
+                        }
+                    }
+                }
+            }
+        })
+
         viewmodel.newsResponse.observe(viewLifecycleOwner, {
             when (it.status) {
                 Status.LOADING -> {
@@ -68,8 +89,8 @@ class ViewPagerFragment : BaseFragmentWithViewModel<ViewPagerFragmentsViewModel>
             }
         })
 
-        if (viewmodel.newsResponse.value == null) {
-            category?.let { viewmodel.getNewsByCategory(it) }
+        if (viewmodel.newsLivedataMap[key]?.value == null) {
+            category?.let { key?.let { it1 -> viewmodel.getNewsByCategory(it, it1) } }
         }
     }
 
@@ -194,7 +215,6 @@ class ViewPagerFragment : BaseFragmentWithViewModel<ViewPagerFragmentsViewModel>
                 content = "sadawdawdw"
             )
         )
-
         return items
     }
 
@@ -204,8 +224,13 @@ class ViewPagerFragment : BaseFragmentWithViewModel<ViewPagerFragmentsViewModel>
     }
 
     companion object {
-        fun newInstance(onToolbarChangeListener: OnToolbarChangeListener, category: String) =
+        fun newInstance(
+            onToolbarChangeListener: OnToolbarChangeListener,
+            category: String,
+            key: String
+        ) =
             ViewPagerFragment().apply {
+                this.key = key
                 this.category = category
                 this.onToolbarChangeListener = onToolbarChangeListener
             }

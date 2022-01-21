@@ -109,18 +109,18 @@ class SqlRepositoryImpl(context: Context) : MySQLiteOpenHelper(context), SqlRepo
         val getLatestId = "SELECT id_source from source ORDER by ROWID DESC LIMIT 1"
         val latestID = getLatestId(getLatestId, "id_source")
         val sql =
-            "INSERT OR REPLACE INTO favorite(author,content, description, publishedAt,source,title,url,urlToImage,isFavorite) VALUES(\"${item.author}\",\"${item.content}\",\"${item.description}\",\"${item.publishedAt}\",${latestID},\"${item.title}\",\"${item.url}\",\"${item.urlToImage}\",1);"
+            "INSERT OR REPLACE INTO favorite(author,content, description, publishedAt,source,title,url,urlToImage,isFavorite) VALUES(\"${item.author?:""}\",\"${item.content?:""}\",\"${item.description?:""}\",\"${item.publishedAt?:""}\",${latestID?:""},\"${item.title?:""}\",\"${item.url?:""}\",\"${item.urlToImage?:""}\",1);"
         Execute(sql)
     }
 
     override suspend fun setHistory(item: NewResponseModelArticles) {
         val sourceSql =
-            "INSERT OR REPLACE INTO source(id,name) VALUES(\"${item.source?.id}\",\"${item.source?.name}\");"
+            "INSERT OR REPLACE INTO source(id,name) VALUES(\"${item.source?.id?:""}\",\"${item.source?.name?:""}\");"
         Execute(sourceSql)
         val getLatestIdInSource = "SELECT id_source from source ORDER by ROWID DESC LIMIT 1"
         val latestID = getLatestId(getLatestIdInSource, "id_source")
         val sql =
-            "INSERT OR REPLACE INTO news(author,content, description, publishedAt,source,title,url,urlToImage,isFavorite) VALUES(\"${item.author}\",\"${item.content}\",\"${item.description}\",\"${item.publishedAt}\",${latestID},\"${item.title}\",\"${item.url}\",\"${item.urlToImage}\",0);"
+            "INSERT OR REPLACE INTO news(author,content, description, publishedAt,source,title,url,urlToImage,isFavorite) VALUES(\"${item.author?:""}\",\"${item.content?:""}\",\"${item.description?:""}\",\"${item.publishedAt?:""}\",${latestID},\"${item.title?:""}\",\"${item.url?:""}\",\"${item.urlToImage?:""}\",0);"
         Execute(sql)
     }
 

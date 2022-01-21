@@ -12,6 +12,7 @@ import tj.esthata.newsapp.modules.mian.home.ui.adapter.NewsRecyclerViewAdapter
 import tj.esthata.newsapp.modules.mian.ui.callback.OnToolbarChangeListener
 import tj.esthata.newsapp.modules.mian.ui.model.NewResponseModelArticles
 import tj.esthata.newsapp.modules.mian.ui.vm.MainViewModel
+import tj.esthata.newsapp.others.d
 
 class HistoryFragment : BaseFragmentWithSharedViewModel<MainViewModel>(
     MainViewModel::class,
@@ -94,6 +95,7 @@ class HistoryFragment : BaseFragmentWithSharedViewModel<MainViewModel>(
     }
 
     override fun onSearch(q: String?) {
+        d("onSearch History", q.toString())
         if (!q.isNullOrEmpty()) {
             viewmodel.searchByHistory(q)
         } else {

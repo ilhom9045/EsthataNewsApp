@@ -8,7 +8,7 @@ import tj.esthata.newsapp.core.fragment.BaseFragment
 import tj.esthata.newsapp.modules.mian.home.ui.model.TabLayoutAndViewPagerModel
 
 class Viewpager2AndTabLayoutAdapter(fm: Fragment) :
-    FragmentStateAdapter(fm.childFragmentManager,fm.lifecycle) {
+    FragmentStateAdapter(fm.childFragmentManager, fm.lifecycle) {
 
     private var items = ArrayList<TabLayoutAndViewPagerModel>()
 
@@ -16,12 +16,8 @@ class Viewpager2AndTabLayoutAdapter(fm: Fragment) :
         return items[position].title
     }
 
-    fun getFragment(position: Int):BaseFragment{
+    fun getFragment(position: Int): BaseFragment {
         return items[position].fragment
-    }
-
-    fun clear() {
-        items.clear()
     }
 
     override fun getItemCount(): Int {
@@ -35,6 +31,5 @@ class Viewpager2AndTabLayoutAdapter(fm: Fragment) :
     fun addFragment(fragmentWithTabName: TabLayoutAndViewPagerModel) {
         items.add(fragmentWithTabName)
     }
-
 
 }

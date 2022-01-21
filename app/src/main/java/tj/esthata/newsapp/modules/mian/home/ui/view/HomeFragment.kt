@@ -11,6 +11,7 @@ import tj.esthata.newsapp.modules.mian.home.ui.adapter.Viewpager2AndTabLayoutAda
 import tj.esthata.newsapp.modules.mian.home.ui.model.TabLayoutAndViewPagerModel
 import tj.esthata.newsapp.modules.mian.ui.callback.OnToolbarChangeListener
 import tj.esthata.newsapp.modules.mian.ui.vm.MainViewModel
+import tj.esthata.newsapp.others.d
 
 class HomeFragment :
     BaseFragmentWithSharedViewModel<MainViewModel>(MainViewModel::class, R.layout.fragment_home) {
@@ -33,10 +34,12 @@ class HomeFragment :
             viewmodel.settingsCategory.value?.let {
                 for (i in it) {
                     if (i.isChecked) {
+                        viewmodel.addToHash(i.name)
                         onToolbarChangeListener?.let { it1 ->
                             ViewPagerFragment.newInstance(
                                 it1,
-                                i.category
+                                i.category,
+                                i.name
                             )
                         }?.let { it2 ->
                             TabLayoutAndViewPagerModel(
@@ -48,6 +51,8 @@ class HomeFragment :
                                 it3
                             )
                         }
+                    } else {
+                        viewmodel.removeFromHash(i.name)
                     }
                 }
             }
@@ -55,6 +60,7 @@ class HomeFragment :
     }
 
     override fun onSearch(q: String?) {
+        d("onSearch home", q.toString())
         if (isResumed) {
             viewpagerAdapter.getFragment(tablayout.selectedTabPosition).onSearch(q)
         }
@@ -67,10 +73,9 @@ class HomeFragment :
     }
 
     private fun listener() {
-        onToolbarChangeListener?.setDisplayHomeEnable(false)
         onToolbarChangeListener?.setToolbarTitle(resources.getString(R.string.title_home))
+        onToolbarChangeListener?.setDisplayHomeEnable(false)
         onToolbarChangeListener?.setMenu()
-        viewPager2.isSaveEnabled = false
         viewPager2.adapter = viewpagerAdapter
         TabLayoutMediator(tablayout, viewPager2) { tab, position ->
             tab.text = viewpagerAdapter.getTabLayoutTitle(position)
