@@ -27,14 +27,6 @@ class NewsDetailsFragment : BaseFragment(R.layout.news_details) {
     private lateinit var url: WebView
     private lateinit var published: TextView
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        d("newsResponseModelArticles", newsResponseModelArticles.toString())
-        onToolbarChangeListener?.clearMenu()
-        onToolbarChangeListener?.setToolbarTitle(resources.getString(R.string.news_details_title))
-        onToolbarChangeListener?.setDisplayHomeEnable(true)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         init(view)
@@ -48,6 +40,11 @@ class NewsDetailsFragment : BaseFragment(R.layout.news_details) {
 
     @SuppressLint("SetJavaScriptEnabled")
     private fun listener() {
+
+        onToolbarChangeListener?.clearMenu()
+        onToolbarChangeListener?.setToolbarTitle(resources.getString(R.string.news_details_title))
+        onToolbarChangeListener?.setDisplayHomeEnable(true)
+
         body.settings.javaScriptEnabled = true
         body.settings.defaultTextEncodingName = "utf-8"
         newsResponseModelArticles?.content?.let {

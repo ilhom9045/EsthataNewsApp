@@ -8,7 +8,7 @@ import tj.esthata.newsapp.core.fragment.BaseFragment
 import tj.esthata.newsapp.modules.mian.home.ui.model.TabLayoutAndViewPagerModel
 
 class Viewpager2AndTabLayoutAdapter(fm: Fragment) :
-    FragmentStateAdapter(fm.requireActivity()) {
+    FragmentStateAdapter(fm.childFragmentManager,fm.lifecycle) {
 
     private var items = ArrayList<TabLayoutAndViewPagerModel>()
 

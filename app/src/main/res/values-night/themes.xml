@@ -10,25 +10,66 @@
         <item name="colorSecondaryVariant">@color/teal_200</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <item name="android:statusBarColor" tools:targetApi="l">@android:color/transparent</item>
         <!-- Customize your theme here. -->
     </style>
 
-    <style name="ToolBarTheme"></style>
+    <style name="ToolBarTheme">
+        <item name="colorControlNormal">@color/white</item>
+        <item name="titleTextColor">@color/white</item>
+    </style>
 
-    <style name="AppearanceToolbarTheme"></style>
+    <style name="AppearanceToolbarTheme">
+        <item name="colorControlNormal">@color/white</item>
+        <item name="colorPrimary">@android:color/transparent</item>
+        <item name="android:textSize">18sp</item>
+    </style>
 
-    <style name="SheetDialog"></style>
+    <style name="SheetDialog" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="android:windowCloseOnTouchOutside">false</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:colorBackground">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:backgroundDimAmount">0.3</item>
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsFloating">true</item>
+    </style>
 
-    <style name="InternetErrorConnectionButtonStyle"></style>
+    <style name="InternetErrorConnectionButtonStyle">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:text">@string/check_internet_connection</item>
+    </style>
 
-    <style name="InternetErrorConnectionTopTextViewStyle"></style>
+    <style name="InternetErrorConnectionTopTextViewStyle">
+        <item name="android:textStyle">bold</item>
+        <item name="android:text">@string/internet_error_connection</item>
+        <item name="android:textSize">@dimen/bottom_sheet_dialogTopTextSize</item>
+    </style>
 
     <style name="NewItemTitleTextViewStyle">
-
+        <item name="android:textColor">@color/white</item>
     </style>
 
     <style name="NewItemDescTextViewStyle">
+        <item name="android:textColor">@color/new_item_desc_textColor</item>
+    </style>
+
+    <style name="MainContainerStyle">
+        <item name="android:background">#2B2929</item>
+    </style>
+
+    <style name="SettingsCardStyle">
+
+    </style>
+
+    <style name="NewItemDetailsTitleTextViewStyle" parent="NewItemTitleTextViewStyle">
+
+    </style>
+
+    <style name="NewItemDetailsDescTextViewStyle">
 
     </style>
 

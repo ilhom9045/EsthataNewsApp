@@ -25,6 +25,7 @@ import kotlinx.coroutines.withContext
 import tj.esthata.newsapp.R
 import tj.esthata.newsapp.others.NativeUtil
 import tj.esthata.newsapp.others.d
+import tj.esthata.newsapp.others.showToast
 import java.io.BufferedWriter
 import java.io.IOException
 import java.io.OutputStream
@@ -93,7 +94,7 @@ abstract class BaseActivity(@LayoutRes layout: Int) : AppCompatActivity(layout) 
                         call()
                         dialog.dismiss()
                     } else {
-                        showShortToast(resources.getString(R.string.internet_error_connection_isNotOnline))
+                        showToast(resources.getString(R.string.internet_error_connection_isNotOnline))
                     }
                 }
             }

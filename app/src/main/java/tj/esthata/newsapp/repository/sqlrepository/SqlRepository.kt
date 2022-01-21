@@ -9,6 +9,6 @@ interface SqlRepository {
     suspend fun setHistory(item: NewResponseModelArticles)
     suspend fun searchByHistory(q: String): ArrayList<NewResponseModelArticles>
     suspend fun searchByFavorite(q: String): ArrayList<NewResponseModelArticles>
-    suspend fun deleteFromHisotry(id: Int): ArrayList<NewResponseModelArticles>
-    suspend fun deleteFromFavorite(id: Int): ArrayList<NewResponseModelArticles>
+    suspend fun deleteFromHistory(id: Int)
+    suspend fun deleteFromFavorite(id: Int)
 }

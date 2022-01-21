@@ -17,7 +17,8 @@ class NewsRecyclerViewAdapter :
     RecyclerView.Adapter<NewsRecyclerViewAdapter.ViewHolder>() {
 
     private var items = ArrayList<NewResponseModelArticles>()
-//    private val diffCallback = DiffCallback()
+
+    //    private val diffCallback = DiffCallback()
 //    private val differ = AsyncListDiffer(this, diffCallback)
     private var onNewRecyclerViewCallBack: NewRecyclerViewCallBack? = null
 
@@ -35,13 +36,17 @@ class NewsRecyclerViewAdapter :
         holder.bind(items[position])
     }
 
-    fun removeAllItems(){
+    fun removeAllItems() {
         val oldSize = ArrayList<NewResponseModelArticles>(items).size
         items.clear()
-        notifyItemRangeRemoved(0,oldSize)
+        notifyItemRangeRemoved(0, oldSize)
     }
 
     fun setItems(items: ArrayList<NewResponseModelArticles>) {
+        if (items.isNullOrEmpty()) {
+            removeAllItems()
+            return
+        }
         this.items = items
         notifyItemRangeChanged(0, itemCount)
     }
@@ -67,7 +72,7 @@ class NewsRecyclerViewAdapter :
             }
 
             newsContainer.setOnLongClickListener {
-                onNewRecyclerViewCallBack?.onLongItemClickListener(item,it)
+                onNewRecyclerViewCallBack?.onLongItemClickListener(item, it)
                 true
             }
         }
@@ -91,6 +96,6 @@ class NewsRecyclerViewAdapter :
 
     interface NewRecyclerViewCallBack {
         fun onItemClickListener(item: NewResponseModelArticles)
-        fun onLongItemClickListener(item: NewResponseModelArticles,v:View)
+        fun onLongItemClickListener(item: NewResponseModelArticles, v: View)
     }
 }

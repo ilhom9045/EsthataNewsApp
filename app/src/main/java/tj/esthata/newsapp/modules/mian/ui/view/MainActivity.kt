@@ -25,20 +25,20 @@ class MainActivity :
     private lateinit var bottomNavigation: BottomNavigationView
     private var searchView: SearchView? = null
 
-    private val bottomNavigationItemList =
-        ArrayList<BottomNavigationFragmentModel>()
-
     companion object {
         private var checkedMenu = 0
         private var selectedMenu = R.id.navigation_home
     }
+
+    private val bottomNavigationItemList =
+        ArrayList<BottomNavigationFragmentModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         init()
         listener()
         viewmodel()
-    }
+     }
 
     private fun init() {
         bottomNavigation = findViewById(R.id.nav_view)
@@ -77,7 +77,6 @@ class MainActivity :
             }
             false
         }
-
         bottomNavigation.menu.getItem(checkedMenu).isChecked = true
         bottomNavigation.selectedItemId = selectedMenu
     }
@@ -95,31 +94,33 @@ class MainActivity :
         return super.onOptionsItemSelected(item)
     }
 
-    fun setBottomNavigationFragments() {
-        bottomNavigationItemList.add(
-            BottomNavigationFragmentModel(
-                0,
-                HomeFragment.newInstance(this)
+    private fun setBottomNavigationFragments() {
+        if (bottomNavigationItemList.isNullOrEmpty()) {
+            bottomNavigationItemList.add(
+                BottomNavigationFragmentModel(
+                    0,
+                    HomeFragment.newInstance(this)
+                )
             )
-        )
-        bottomNavigationItemList.add(
-            BottomNavigationFragmentModel(
-                1,
-                HistoryFragment.newInstance(this)
+            bottomNavigationItemList.add(
+                BottomNavigationFragmentModel(
+                    1,
+                    HistoryFragment.newInstance(this)
+                )
             )
-        )
-        bottomNavigationItemList.add(
-            BottomNavigationFragmentModel(
-                2,
-                FavoriteFragment.newInstance(this)
+            bottomNavigationItemList.add(
+                BottomNavigationFragmentModel(
+                    2,
+                    FavoriteFragment.newInstance(this)
+                )
             )
-        )
-        bottomNavigationItemList.add(
-            BottomNavigationFragmentModel(
-                3,
-                SettingsFragment.newInstance(this)
+            bottomNavigationItemList.add(
+                BottomNavigationFragmentModel(
+                    3,
+                    SettingsFragment.newInstance(this)
+                )
             )
-        )
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -131,7 +132,6 @@ class MainActivity :
     }
 
     private fun transaction(fragment: BaseFragment) {
-        searchView?.inputType = InputType.TYPE_NULL
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.main_container, fragment)

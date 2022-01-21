@@ -67,6 +67,7 @@ class ViewPagerFragment : BaseFragmentWithViewModel<ViewPagerFragmentsViewModel>
                 }
             }
         })
+
         if (viewmodel.newsResponse.value == null) {
             category?.let { viewmodel.getNewsByCategory(it) }
         }

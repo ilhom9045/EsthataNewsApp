@@ -33,9 +33,7 @@ class FavoriteFragment : BaseFragmentWithSharedViewModel<MainViewModel>(
     private fun viewmodel(savedInstanceState: Bundle?) {
         viewmodel.favorite.observe(viewLifecycleOwner, {
             loading.hideLoading()
-            if (!it.isNullOrEmpty()) {
-                newsRecyclerViewAdapter.setItems(it)
-            }
+            newsRecyclerViewAdapter.setItems(it)
         })
 
         if (savedInstanceState == null) {
@@ -95,9 +93,9 @@ class FavoriteFragment : BaseFragmentWithSharedViewModel<MainViewModel>(
     }
 
     override fun onSearch(q: String?) {
-        if (!q.isNullOrEmpty()){
+        if (!q.isNullOrEmpty()) {
             viewmodel.searchByFavorite(q)
-        }else{
+        } else {
             viewmodel.getFavorite()
         }
     }

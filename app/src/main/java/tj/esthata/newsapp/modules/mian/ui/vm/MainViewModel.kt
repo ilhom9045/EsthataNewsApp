@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import okhttp3.Dispatcher
 import tj.esthata.newsapp.core.viewmodel.BaseViewModel
 import tj.esthata.newsapp.modules.mian.settings.model.SettingsCategoryModel
 import tj.esthata.newsapp.modules.mian.ui.model.NewResponseModelArticles
@@ -18,9 +17,9 @@ class MainViewModel : BaseViewModel() {
         items.add(SettingsCategoryModel("Business Insider", "business", "en", "us"))
         items.add(SettingsCategoryModel("Buzzfeed", "entertainment", "en", "us"))
         items.add(SettingsCategoryModel("Crypto Coins News", "technology", "en", "us"))
-        items.add(SettingsCategoryModel("Engadget", "technology", "en", "us"))
         this.value = items
     }
+
     val settingsCategory: LiveData<ArrayList<SettingsCategoryModel>> = mSettingsCategory
 
     private val mHistory = MutableLiveData<ArrayList<NewResponseModelArticles>>()
@@ -67,13 +66,15 @@ class MainViewModel : BaseViewModel() {
 
     fun deleteFromHistory(id:Int){
         viewModelScope.launch(Dispatchers.IO) {
-            mHistory.postValue(sqlRepository.deleteFromHisotry(id))
+            sqlRepository.deleteFromHistory(id)
+            mHistory.postValue(sqlRepository.getHistoryNews())
         }
     }
 
     fun deleteFromFavorite(id:Int){
         viewModelScope.launch(Dispatchers.IO) {
-            mFavorite.postValue(sqlRepository.deleteFromFavorite(id))
+            sqlRepository.deleteFromFavorite(id)
+            mFavorite.postValue(sqlRepository.getFavoriteNews())
         }
     }
 

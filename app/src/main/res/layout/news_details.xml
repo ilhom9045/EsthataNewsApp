@@ -19,10 +19,9 @@
 
         <TextView
             android:id="@+id/news_details_titleTextView"
-            style="@style/NewItemTitleTextViewStyle"
+            style="@style/NewItemDetailsTitleTextViewStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white"
             android:paddingStart="16dp"
             android:paddingTop="8dp"
             android:paddingEnd="16dp"
@@ -34,10 +33,9 @@
 
         <TextView
             android:id="@+id/news_details_descTextView"
-            style="@style/NewItemDescTextViewStyle"
+            style="@style/NewItemDetailsDescTextViewStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white"
             android:paddingStart="16dp"
             android:paddingTop="8dp"
             android:paddingEnd="16dp"
@@ -79,12 +77,11 @@
 
         <TextView
             android:id="@+id/news_details_publishedTextView"
-            style="@style/NewItemDescTextViewStyle"
+            style="@style/NewItemDetailsDescTextViewStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
-            android:background="@color/white"
             android:paddingStart="16dp"
             android:paddingTop="8dp"
             android:paddingEnd="16dp"

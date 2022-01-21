@@ -10,7 +10,7 @@ class SqlRepositoryImpl(context: Context) : MySQLiteOpenHelper(context), SqlRepo
 
     @SuppressLint("Range")
     override suspend fun getFavoriteNews(): ArrayList<NewResponseModelArticles> {
-        val sql = "SELECT * from news WHERE isFavorite = 1 ORDER by id DESC"
+        val sql = "SELECT * from favorite ORDER by id DESC"
         return getNewsByQuery(sql)
     }
 
@@ -20,7 +20,6 @@ class SqlRepositoryImpl(context: Context) : MySQLiteOpenHelper(context), SqlRepo
         return getNewsByQuery(sql)
     }
 
-
     @SuppressLint("Range")
     override suspend fun searchByHistory(q: String):ArrayList<NewResponseModelArticles> {
         val sql = "SELECT * from news WHERE title LIKE \"%$q%\""
@@ -29,20 +28,18 @@ class SqlRepositoryImpl(context: Context) : MySQLiteOpenHelper(context), SqlRepo
 
     @SuppressLint("Range")
     override suspend fun searchByFavorite(q: String):ArrayList<NewResponseModelArticles> {
-        val sql = "SELECT * from news WHERE news.isFavorite = 1 AND title LIKE \"%$q%\""
+        val sql = "SELECT * from favorite title LIKE \"%$q%\""
         return getNewsByQuery(sql)
     }
 
-    override suspend fun deleteFromHisotry(id: Int): ArrayList<NewResponseModelArticles> {
-        val deleteQuery = "UPDATE news SET isFavorite = 0 WHERE id = $id"
+    override suspend fun deleteFromHistory(id: Int) {
+        val deleteQuery = "DELETE FROM news WHERE id = $id"
         Execute(deleteQuery)
-        return getFavoriteNews()
     }
 
-    override suspend fun deleteFromFavorite(id: Int): ArrayList<NewResponseModelArticles> {
-        val deleteQuery = "DELETE FROM table WHERE id = $id"
+    override suspend fun deleteFromFavorite(id: Int) {
+        val deleteQuery = "DELETE FROM favorite WHERE id = $id"
         Execute(deleteQuery)
-        return getHistoryNews()
     }
 
     @SuppressLint("Range")
@@ -109,10 +106,10 @@ class SqlRepositoryImpl(context: Context) : MySQLiteOpenHelper(context), SqlRepo
     }
 
     override suspend fun setFavorite(item: NewResponseModelArticles) {
-        val getLatestId = "SELECT OR REPLACE id_source from source ORDER by ROWID DESC LIMIT 1"
+        val getLatestId = "SELECT id_source from source ORDER by ROWID DESC LIMIT 1"
         val latestID = getLatestId(getLatestId, "id_source")
         val sql =
-            "INSERT OR REPLACE INTO news(author,content, description, publishedAt,source,title,url,urlToImage,isFavorite) VALUES(\"${item.author}\",\"${item.content}\",\"${item.description}\",\"${item.publishedAt}\",${latestID},\"${item.title}\",\"${item.url}\",\"${item.urlToImage}\",1);"
+            "INSERT OR REPLACE INTO favorite(author,content, description, publishedAt,source,title,url,urlToImage,isFavorite) VALUES(\"${item.author}\",\"${item.content}\",\"${item.description}\",\"${item.publishedAt}\",${latestID},\"${item.title}\",\"${item.url}\",\"${item.urlToImage}\",1);"
         Execute(sql)
     }
 

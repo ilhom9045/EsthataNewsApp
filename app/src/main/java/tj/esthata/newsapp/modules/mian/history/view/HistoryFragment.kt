@@ -33,9 +33,7 @@ class HistoryFragment : BaseFragmentWithSharedViewModel<MainViewModel>(
     private fun viewmodel(savedInstanceState: Bundle?) {
         viewmodel.history.observe(viewLifecycleOwner, {
             loading.hideLoading()
-            if (!it.isNullOrEmpty()) {
-                newsRecyclerViewAdapter.setItems(it)
-            }
+            newsRecyclerViewAdapter.setItems(it)
         })
 
         if (savedInstanceState == null) {

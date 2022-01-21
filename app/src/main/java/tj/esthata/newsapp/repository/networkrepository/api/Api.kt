@@ -16,10 +16,4 @@ interface Api {
 
     @GET("/v2/everything")
     fun search(@Query(ApiConfig.qInTitle) qInTitle: String): Call<NewResponseModel>
-
-    @GET("/v2/everything")
-    fun getAllNews()
-
-    @GET("/v2/top-headlines/sources")
-    fun getSource()
 }
