@@ -79,7 +79,7 @@
     </style>
 
     <style name="NewItemDetailsDescTextViewStyle" parent="NewItemDescTextViewStyle">
-        <item name="background">@color/white</item>
+        <item name="android:background">@color/white</item>
     </style>
 
 </resources>

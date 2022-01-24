@@ -3,8 +3,8 @@ package tj.esthata.newsapp.repository.sqlrepository
 import android.annotation.SuppressLint
 import android.content.Context
 import android.database.Cursor
-import tj.esthata.newsapp.modules.mian.ui.model.NewResponseModelArticles
-import tj.esthata.newsapp.modules.mian.ui.model.NewResponseModelArticlesSource
+import tj.esthata.newsapp.modules.main.ui.model.NewResponseModelArticles
+import tj.esthata.newsapp.modules.main.ui.model.NewResponseModelArticlesSource
 
 class SqlRepositoryImpl(context: Context) : MySQLiteOpenHelper(context), SqlRepository {
 

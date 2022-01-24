@@ -3,13 +3,50 @@ package tj.esthata.newsapp.core.fragment
 import androidx.annotation.IdRes
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.progressindicator.CircularProgressIndicator
-import tj.esthata.newsapp.modules.mian.ui.callback.OnSearchViewChangeListener
+import tj.esthata.newsapp.core.activity.BaseActivity
 
-abstract class BaseFragment(@LayoutRes layout: Int) : Fragment(layout), OnSearchViewChangeListener {
+abstract class BaseFragment(@LayoutRes layout: Int) : Fragment(layout) {
 
     protected val loading: Loading by lazy {
         Loading()
+    }
+
+    protected val toolbar: Toolbar by lazy { Toolbar() }
+
+    protected open inner class Toolbar {
+
+        private var base_toolbar: MaterialToolbar? = null
+
+        fun setToolbar(@IdRes material_toolbar_id: Int): Toolbar {
+            base_toolbar = requireView().findViewById(material_toolbar_id)
+            setHasOptionsMenu(true)
+            (activity as BaseActivity).setSupportActionBar(base_toolbar)
+            return toolbar
+        }
+
+        fun setTitle(title: String?): Toolbar {
+            (activity as BaseActivity).supportActionBar?.title = title
+            return toolbar
+        }
+
+        fun setDisplayHomeEnable(enable: Boolean): Toolbar {
+            (activity as BaseActivity).supportActionBar?.setDisplayHomeAsUpEnabled(enable)
+            return toolbar
+        }
+
+        fun clearMenu() {
+            base_toolbar?.menu?.clear()
+        }
+
+        fun setMenu() {
+            base_toolbar?.menu?.let { onCreateOptionsMenu(it, requireActivity().menuInflater) }
+        }
+    }
+
+    open fun onSearch(q: String?) {
+
     }
 
     inner class Loading() {

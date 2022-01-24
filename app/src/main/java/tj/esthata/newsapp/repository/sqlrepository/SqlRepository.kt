@@ -1,6 +1,6 @@
 package tj.esthata.newsapp.repository.sqlrepository
 
-import tj.esthata.newsapp.modules.mian.ui.model.NewResponseModelArticles
+import tj.esthata.newsapp.modules.main.ui.model.NewResponseModelArticles
 
 interface SqlRepository {
     suspend fun getFavoriteNews(): ArrayList<NewResponseModelArticles>

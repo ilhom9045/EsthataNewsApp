@@ -5,6 +5,8 @@ import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -20,6 +22,7 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import tj.esthata.newsapp.R
@@ -35,37 +38,8 @@ import java.net.URL
 
 abstract class BaseActivity(@LayoutRes layout: Int) : AppCompatActivity(layout) {
 
-    protected val toolbar: Toolbar by lazy { Toolbar() }
     private var isNetworkDialogShow = false
-
-    protected open inner class Toolbar {
-
-        private var base_toolbar: MaterialToolbar? = null
-
-        fun setToolbar(@IdRes material_toolbar_id: Int): Toolbar {
-            base_toolbar = findViewById(material_toolbar_id)
-            setSupportActionBar(base_toolbar)
-            return toolbar
-        }
-
-        fun setTitle(title: String?): Toolbar {
-            supportActionBar?.title = title
-            return toolbar
-        }
-
-        fun setDisplayHomeEnable(enable: Boolean): Toolbar {
-            supportActionBar?.setDisplayHomeAsUpEnabled(enable)
-            return toolbar
-        }
-
-        fun clearMenu() {
-            base_toolbar?.menu?.clear()
-        }
-
-        fun setMenu() {
-            onCreateOptionsMenu(base_toolbar?.menu)
-        }
-    }
+    private var doubleBackToExitPressedOnce = false
 
     protected fun showShortToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
@@ -148,6 +122,23 @@ abstract class BaseActivity(@LayoutRes layout: Int) : AppCompatActivity(layout) 
             } catch (e: IOException) {
                 e.printStackTrace()
                 false
+            }
+        }
+    }
+
+    override fun onBackPressed() {
+        if (supportFragmentManager.backStackEntryCount > 0) {
+            super.onBackPressed()
+        } else {
+            if (doubleBackToExitPressedOnce) {
+                super.onBackPressed()
+                return
+            }
+            doubleBackToExitPressedOnce = true
+            showLongToast(resources.getString(R.string.double_click_to_exit))
+            lifecycleScope.launch{
+                delay(2000)
+                doubleBackToExitPressedOnce = false
             }
         }
     }

@@ -19,7 +19,7 @@
 
         <activity
             android:screenOrientation="portrait"
-            android:name=".modules.mian.ui.view.MainActivity"
+            android:name=".modules.StartActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

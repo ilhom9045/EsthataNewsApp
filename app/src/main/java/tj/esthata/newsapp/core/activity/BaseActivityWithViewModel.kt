@@ -27,7 +27,6 @@ abstract class BaseActivityWithViewModel<T : BaseViewModel>(
 
     protected val viewmodel by viewModel(clazz = clazz)
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewmodel.responseErrorHandler.observe(this, {
@@ -41,6 +40,10 @@ abstract class BaseActivityWithViewModel<T : BaseViewModel>(
 
                 ErrorStatus.ErrorException -> {
                     it.message?.let { it1 -> showInternetErrorResponse(it1) }
+                }
+
+                null -> {
+
                 }
             }
         })
