@@ -27,7 +27,6 @@ class MainFragment :
     private var searchView: SearchView? = null
 
     companion object {
-        private var mainContainderFragmentName = ""
         private var checkedMenu = 0
         private var selectedMenu = R.id.navigation_home
     }
@@ -49,6 +48,7 @@ class MainFragment :
         bottomNavigation.setOnItemSelectedListener {
             selectedMenu = it.itemId
             when (it.itemId) {
+
                 R.id.navigation_home -> {
                     checkedMenu = 0
                     transaction(HomeFragment.newInstance(this))
@@ -75,6 +75,7 @@ class MainFragment :
             }
             false
         }
+
         bottomNavigation.menu.getItem(checkedMenu).isChecked = true
         bottomNavigation.selectedItemId = selectedMenu
     }
@@ -96,7 +97,7 @@ class MainFragment :
         super.onCreateOptionsMenu(menu, inflater)
         menu.clear()
         inflater.inflate(R.menu.main_menu, menu)
-        searchView = menu.findItem(R.id.app_bar_search)?.actionView as SearchView
+        searchView = menu.findItem(R.id.app_bar_search)?.actionView as SearchView?
         searchView?.setOnQueryTextListener(this)
     }
 

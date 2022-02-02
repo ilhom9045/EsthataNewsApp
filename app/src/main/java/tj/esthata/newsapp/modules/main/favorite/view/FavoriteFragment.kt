@@ -17,7 +17,7 @@ import tj.esthata.newsapp.others.d
 class FavoriteFragment : BaseFragmentWithSharedViewModel<MainViewModel>(
     MainViewModel::class.java,
     R.layout.favorite_fragment
-) {
+), NewsRecyclerViewAdapter.NewRecyclerViewCallBack {
 
     private var onToolbarChangeListener: OnToolbarChangeListener? = null
 
@@ -47,42 +47,7 @@ class FavoriteFragment : BaseFragmentWithSharedViewModel<MainViewModel>(
         onToolbarChangeListener?.setMenu()
         onToolbarChangeListener?.setDisplayHomeEnable(false)
         loading.setLoading(R.id.base_loading_indicator).showLoading()
-        newsRecyclerViewAdapter.setCallBack(object :
-            NewsRecyclerViewAdapter.NewRecyclerViewCallBack {
-            override fun onItemClickListener(item: NewResponseModelArticles) {
-                onToolbarChangeListener?.let { NewsDetailsFragment.newInstance(it, item) }?.let {
-                    transaction(
-                        R.id.main_container,
-                        it
-                    )
-                }
-            }
-
-            override fun onLongItemClickListener(item: NewResponseModelArticles, v: View) {
-                val popupMenu = PopupMenu(context, v)
-                popupMenu.setOnMenuItemClickListener {
-                    when (it.itemId) {
-                        R.id.delete_from_favorite -> {
-                            item.id?.let { it1 -> viewmodel.deleteFromFavorite(it1) }
-                            true
-                        }
-                        else -> false
-                    }
-                }
-                popupMenu.inflate(R.menu.favorite_popup_menu)
-                try {
-                    val field = PopupMenu::class.java.getDeclaredField("mPopup")
-                    field.isAccessible = true
-                    val mPopup = field.get(popupMenu)
-                    mPopup.javaClass.getDeclaredMethod("setForceShowIcon", Boolean::class.java)
-                        .invoke(mPopup, true)
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                } finally {
-                    popupMenu.show()
-                }
-            }
-        })
+        newsRecyclerViewAdapter.setCallBack(this)
 
         recyclerView.layoutManager = CustomLinearLayoutManager(requireContext())
         recyclerView.adapter = newsRecyclerViewAdapter
@@ -100,6 +65,41 @@ class FavoriteFragment : BaseFragmentWithSharedViewModel<MainViewModel>(
             viewmodel.searchByFavorite(q)
         } else {
             viewmodel.getFavorite()
+        }
+    }
+
+    override fun onItemClickListener(item: NewResponseModelArticles) {
+        onToolbarChangeListener?.let { NewsDetailsFragment.newInstance(it, item) }?.let {
+            transaction(
+                R.id.main_container,
+                it
+            )
+        }
+    }
+
+    override fun onLongItemClickListener(item: NewResponseModelArticles, v: View) {
+        val popupMenu = PopupMenu(context, v)
+        popupMenu.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.delete_from_favorite -> {
+                    item.id?.let { it1 -> viewmodel.deleteFromFavorite(it1) }
+                    true
+                }
+                else -> false
+            }
+        }
+
+        popupMenu.inflate(R.menu.favorite_popup_menu)
+        try {
+            val field = PopupMenu::class.java.getDeclaredField("mPopup")
+            field.isAccessible = true
+            val mPopup = field.get(popupMenu)
+            mPopup.javaClass.getDeclaredMethod("setForceShowIcon", Boolean::class.java)
+                .invoke(mPopup, true)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        } finally {
+            popupMenu.show()
         }
     }
 

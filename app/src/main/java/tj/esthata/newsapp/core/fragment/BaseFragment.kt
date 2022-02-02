@@ -9,9 +9,7 @@ import tj.esthata.newsapp.core.activity.BaseActivity
 
 abstract class BaseFragment(@LayoutRes layout: Int) : Fragment(layout) {
 
-    protected val loading: Loading by lazy {
-        Loading()
-    }
+    protected val loading: Loading by lazy { Loading() }
 
     protected val toolbar: Toolbar by lazy { Toolbar() }
 
@@ -22,17 +20,23 @@ abstract class BaseFragment(@LayoutRes layout: Int) : Fragment(layout) {
         fun setToolbar(@IdRes material_toolbar_id: Int): Toolbar {
             base_toolbar = requireView().findViewById(material_toolbar_id)
             setHasOptionsMenu(true)
-            (activity as BaseActivity).setSupportActionBar(base_toolbar)
+            if (activity is BaseActivity) {
+                (activity as BaseActivity).setSupportActionBar(base_toolbar)
+            }
             return toolbar
         }
 
         fun setTitle(title: String?): Toolbar {
-            (activity as BaseActivity).supportActionBar?.title = title
+            if (activity is BaseActivity) {
+                (activity as BaseActivity).supportActionBar?.title = title
+            }
             return toolbar
         }
 
         fun setDisplayHomeEnable(enable: Boolean): Toolbar {
-            (activity as BaseActivity).supportActionBar?.setDisplayHomeAsUpEnabled(enable)
+            if (activity is BaseActivity) {
+                (activity as BaseActivity).supportActionBar?.setDisplayHomeAsUpEnabled(enable)
+            }
             return toolbar
         }
 

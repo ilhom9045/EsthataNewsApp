@@ -14,7 +14,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import tj.esthata.newsapp.others.MyMutableLiveData
-import tj.esthata.newsapp.repository.networkrepository.NetworkRepositry
+import tj.esthata.newsapp.repository.networkrepository.NetworkRepository
 import tj.esthata.newsapp.repository.networkrepository.event.ErrorEvent
 import tj.esthata.newsapp.repository.networkrepository.event.ErrorStatus
 import tj.esthata.newsapp.repository.networkrepository.event.Event
@@ -25,8 +25,9 @@ import java.net.SocketException
 import java.net.SocketTimeoutException
 
 abstract class BaseViewModel : ViewModel(), KoinComponent {
+
     private val mutex = Mutex()
-    protected val network: NetworkRepositry by inject()
+    protected val network: NetworkRepository by inject()
     protected val sqlRepository: SqlRepository by inject()
 
     private val _responseErrorHandler = MutableLiveData<ErrorEvent>()
@@ -70,7 +71,7 @@ abstract class BaseViewModel : ViewModel(), KoinComponent {
                     errorHandler(t, liveData)
                 }
             })
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             errorHandler(e, liveData)
         }
     }

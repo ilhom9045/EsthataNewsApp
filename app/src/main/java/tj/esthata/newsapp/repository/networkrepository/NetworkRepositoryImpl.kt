@@ -6,16 +6,19 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import tj.esthata.newsapp.BuildConfig
-import tj.esthata.newsapp.others.NativeUtil
+import tj.esthata.newsapp.repository.nativerepository.NativeRepository
 import tj.esthata.newsapp.repository.networkrepository.api.Api
 import tj.esthata.newsapp.repository.networkrepository.interceptor.ApiKeyInterceptor
 
-class NetworkRepositoryImpl(private val context: Context) : NetworkRepositry {
+class NetworkRepositoryImpl(
+    private val context: Context,
+    private val nativeRepository: NativeRepository
+) : NetworkRepository {
 
     override fun getApi(): Api {
         return Retrofit
             .Builder()
-            .baseUrl(getBaseUrl())
+            .baseUrl(nativeRepository.getBaseUrl())
             .client(getClient())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
@@ -29,8 +32,7 @@ class NetworkRepositoryImpl(private val context: Context) : NetworkRepositry {
                 this.level = HttpLoggingInterceptor.Level.BODY
             }
         })
-        .addInterceptor(ApiKeyInterceptor(context))
+        .addInterceptor(ApiKeyInterceptor(context, nativeRepository))
         .build()
 
-    private fun getBaseUrl() = NativeUtil.getBaseUrl()
 }

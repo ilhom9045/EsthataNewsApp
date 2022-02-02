@@ -1,38 +1,27 @@
 package tj.esthata.newsapp.core.activity
 
 import android.annotation.SuppressLint
-import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.net.Uri
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.webkit.WebView
-import android.webkit.WebViewClient
 import android.widget.Button
 import android.widget.Toast
-import androidx.annotation.IdRes
 import androidx.annotation.LayoutRes
-import androidx.annotation.MenuRes
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
-import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.koin.android.ext.android.inject
 import tj.esthata.newsapp.R
-import tj.esthata.newsapp.others.NativeUtil
 import tj.esthata.newsapp.others.d
 import tj.esthata.newsapp.others.showToast
-import java.io.BufferedWriter
+import tj.esthata.newsapp.repository.nativerepository.NativeRepository
 import java.io.IOException
-import java.io.OutputStream
-import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
 
@@ -40,6 +29,7 @@ abstract class BaseActivity(@LayoutRes layout: Int) : AppCompatActivity(layout) 
 
     private var isNetworkDialogShow = false
     private var doubleBackToExitPressedOnce = false
+    private val nativeRepository:NativeRepository by inject()
 
     protected fun showShortToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
@@ -113,7 +103,7 @@ abstract class BaseActivity(@LayoutRes layout: Int) : AppCompatActivity(layout) 
     private suspend fun isOnline(): Boolean {
         return withContext(Dispatchers.IO) {
             try {
-                val url = URL(NativeUtil.getBaseUrl())
+                val url = URL(nativeRepository.getBaseUrl())
                 val urlConn: HttpURLConnection = url.openConnection() as HttpURLConnection
                 urlConn.connectTimeout = 1000
                 urlConn.connect()

@@ -16,14 +16,7 @@ class NewsRecyclerViewAdapter :
     RecyclerView.Adapter<NewsRecyclerViewAdapter.ViewHolder>() {
 
     private var items = ArrayList<NewResponseModelArticles>()
-
-    //    private val diffCallback = DiffCallback()
-//    private val differ = AsyncListDiffer(this, diffCallback)
     private var onNewRecyclerViewCallBack: NewRecyclerViewCallBack? = null
-
-    fun setCallBack(onNewRecyclerViewCallBack: NewRecyclerViewCallBack) {
-        this.onNewRecyclerViewCallBack = onNewRecyclerViewCallBack
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -34,6 +27,8 @@ class NewsRecyclerViewAdapter :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(items[position])
     }
+
+    override fun getItemCount() = items.size
 
     fun removeAllItems() {
         val oldSize = ArrayList<NewResponseModelArticles>(items).size
@@ -50,7 +45,9 @@ class NewsRecyclerViewAdapter :
         notifyItemRangeChanged(0, itemCount)
     }
 
-    override fun getItemCount() = items.size
+    fun setCallBack(onNewRecyclerViewCallBack: NewRecyclerViewCallBack) {
+        this.onNewRecyclerViewCallBack = onNewRecyclerViewCallBack
+    }
 
     inner class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
 
@@ -74,22 +71,6 @@ class NewsRecyclerViewAdapter :
                 onNewRecyclerViewCallBack?.onLongItemClickListener(item, it)
                 true
             }
-        }
-    }
-
-    private inner class DiffCallback : DiffUtil.ItemCallback<NewResponseModelArticles>() {
-        override fun areItemsTheSame(
-            oldItem: NewResponseModelArticles,
-            newItem: NewResponseModelArticles
-        ): Boolean {
-            return oldItem == newItem
-        }
-
-        override fun areContentsTheSame(
-            oldItem: NewResponseModelArticles,
-            newItem: NewResponseModelArticles
-        ): Boolean {
-            return oldItem == newItem
         }
     }
 

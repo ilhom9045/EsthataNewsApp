@@ -28,18 +28,23 @@ abstract class BaseFragmentWithViewModel<T : BaseViewModel>(
             when (it.status) {
 
                 ErrorStatus.InternetConnectionException -> {
-                    (activity as BaseActivity).showInternetErrorConnectionDialog() {
-                        it.status = null
-                        viewmodel.continueRequest()
+
+                    if (activity is BaseActivity) {
+                        (activity as BaseActivity).showInternetErrorConnectionDialog() {
+                            it.status = null
+                            viewmodel.continueRequest()
+                        }
                     }
                 }
 
                 ErrorStatus.ErrorException -> {
                     it.message?.let { it1 ->
-                        it.status = null
-                        (activity as BaseActivity).showInternetErrorResponse(
-                            it1
-                        )
+                        if (activity is BaseActivity) {
+                            it.status = null
+                            (activity as BaseActivity).showInternetErrorResponse(
+                                it1
+                            )
+                        }
                     }
                 }
                 null -> {

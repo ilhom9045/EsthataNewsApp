@@ -6,7 +6,6 @@
         android:icon="@drawable/ic_home"
         android:title="" />
 
-
     <item
         android:id="@+id/navigation_history"
         android:icon="@drawable/ic_history"

@@ -18,10 +18,7 @@ class SettingsFragment : BaseFragmentWithSharedViewModel<MainViewModel>(
     private var onToolbarChangeListener: OnToolbarChangeListener? = null
     private lateinit var recycerlview: RecyclerView
     private lateinit var settingsCategoryRecyclerViewAdapter: SettingsCategoryRecyclerViewAdapter
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        onToolbarChangeListener?.setToolbarTitle(resources.getString(R.string.title_settings))
-    }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -43,6 +40,9 @@ class SettingsFragment : BaseFragmentWithSharedViewModel<MainViewModel>(
     }
 
     private fun listener() {
+        onToolbarChangeListener?.setToolbarTitle(resources.getString(R.string.title_settings))
+        onToolbarChangeListener?.setDisplayHomeEnable(false)
+        onToolbarChangeListener?.setMenu()
         recycerlview.layoutManager = LinearLayoutManager(requireContext())
         recycerlview.adapter = settingsCategoryRecyclerViewAdapter
     }

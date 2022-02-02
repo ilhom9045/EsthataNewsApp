@@ -100,13 +100,13 @@ class MainViewModel : BaseViewModel() {
     }
 
     fun searchByHistory(q: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             mHistory.postValue(sqlRepository.searchByHistory(q))
         }
     }
 
     fun deleteFromHistory(id: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             sqlRepository.deleteFromHistory(id)
             mHistory.postValue(sqlRepository.getHistoryNews())
         }

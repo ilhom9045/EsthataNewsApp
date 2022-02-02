@@ -6,7 +6,7 @@ import android.database.Cursor
 import android.database.SQLException
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import tj.esthata.newsapp.others.e
+import android.util.Log
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -23,9 +23,9 @@ abstract class MySQLiteOpenHelper(private val context: Context) : SQLiteOpenHelp
     init {
         val file = File(DB_PATH)
         if (file.exists() && file.isDirectory) {
-            e(TAG, "Directory Exists")
+            Log.e(TAG, "Directory Exists")
         } else {
-            e(TAG, "Creating directory")
+            Log.e(TAG, "Creating directory")
             file.mkdir()
         }
         try {
@@ -61,7 +61,7 @@ abstract class MySQLiteOpenHelper(private val context: Context) : SQLiteOpenHelp
             close()
             try {
                 copyDataBase()
-                e(TAG, "createDatabase database created")
+                Log.e(TAG, "createDatabase database created")
             } catch (mIOException: IOException) {
                 throw Error("ErrorCopyingDataBase")
             }
@@ -89,7 +89,7 @@ abstract class MySQLiteOpenHelper(private val context: Context) : SQLiteOpenHelp
             mOutput.close()
             mInput.close()
         } catch (ex: Exception) {
-            e(TAG, ex.message!!)
+            Log.e(TAG, ex.message!!)
         }
     }
 
@@ -99,7 +99,7 @@ abstract class MySQLiteOpenHelper(private val context: Context) : SQLiteOpenHelp
             mDataBase =
                 SQLiteDatabase.openDatabase(DB_PATH + DB_NAME, null, SQLiteDatabase.OPEN_READWRITE)
         } catch (ex: Exception) {
-            e(TAG, ex.message!!)
+            Log.e(TAG, ex.message!!)
         }
         return mDataBase != null
     }
@@ -108,7 +108,17 @@ abstract class MySQLiteOpenHelper(private val context: Context) : SQLiteOpenHelp
         try {
             mDataBase?.execSQL(sql)
         } catch (ex: Exception) {
-            e(TAG, ex.message!!)
+            Log.e(TAG, ex.message!!)
+        }
+    }
+
+    fun ExecuteWithResult(sql: String?): Boolean {
+        return try {
+            mDataBase?.execSQL(sql)
+            true
+        } catch (ex: Exception) {
+            Log.e(TAG, ex.message!!)
+            false
         }
     }
 
@@ -118,7 +128,7 @@ abstract class MySQLiteOpenHelper(private val context: Context) : SQLiteOpenHelp
             cur = mDataBase?.rawQuery(sql, null)
         } catch (ex: Exception) {
             val message = ex.message
-            e(TAG, message!!)
+            Log.e(TAG, message!!)
         }
         return cur
     }
@@ -129,7 +139,7 @@ abstract class MySQLiteOpenHelper(private val context: Context) : SQLiteOpenHelp
             if (mDataBase != null) mDataBase!!.close()
             super.close()
         } catch (ex: Exception) {
-            e(TAG, ex.message!!)
+            Log.e(TAG, ex.message!!)
         }
     }
 

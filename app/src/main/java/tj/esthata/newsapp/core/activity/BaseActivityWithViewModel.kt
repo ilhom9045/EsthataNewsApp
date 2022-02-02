@@ -1,31 +1,19 @@
 package tj.esthata.newsapp.core.activity
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.widget.Button
 import androidx.annotation.LayoutRes
-import androidx.lifecycle.lifecycleScope
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.button.MaterialButton
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import org.koin.androidx.viewmodel.ext.android.viewModel
-import tj.esthata.newsapp.R
+import androidx.lifecycle.ViewModelProvider
 import tj.esthata.newsapp.core.viewmodel.BaseViewModel
-import tj.esthata.newsapp.others.NativeUtil
 import tj.esthata.newsapp.repository.networkrepository.event.ErrorStatus
-import java.io.IOException
-import java.net.HttpURLConnection
-import java.net.URL
-import kotlin.reflect.KClass
 
 abstract class BaseActivityWithViewModel<T : BaseViewModel>(
-    clazz: KClass<T>,
+    clazz: Class<T>,
     @LayoutRes layout: Int
 ) : BaseActivity(layout) {
 
-    protected val viewmodel by viewModel(clazz = clazz)
+    protected val viewmodel by lazy{
+        ViewModelProvider(this)[clazz]
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
